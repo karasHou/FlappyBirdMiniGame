@@ -11,7 +11,11 @@ export class Main {
         const loader = ResourceLoader.create();
         loader.onload(map => this.onResourceFirstLoaded(map));
 
-        Director.getInstance();
+        let image = new Image();
+        image.src = '../res/background.png';
+
+
+
     }
 
     //资源第一次加载
