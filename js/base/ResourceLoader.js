@@ -2,13 +2,16 @@
 import {Resources} from "./Resource.js";
 
 export class ResourceLoader {
-
+    //构造函数
     constructor() {
         //导入资源
         this.map = new Map(Resources);
         for (let [key, value] of this.map) {
             //微信官方的创建img的API
-            const image = wx.createImage();
+            // const image = wx.createImage();
+            // image.src = value;
+            // this.map.set(key, image);
+            const image = new Image();
             image.src = value;
             this.map.set(key, image);
         }
@@ -27,7 +30,7 @@ export class ResourceLoader {
         }
     }
 
-    static creaate() {
+    static create() {
         return new ResourceLoader();
     }
 
