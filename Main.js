@@ -1,6 +1,7 @@
 //初始化整个游戏的精灵，作为游戏开始的入口
 
 import {ResourceLoader} from "./js/base/ResourceLoader.js";
+import {BackGround} from "./js/runtime/BackGround.js";
 
 export class Main {
     constructor() {
@@ -10,28 +11,12 @@ export class Main {
         const loader = ResourceLoader.create();
         loader.onload(map => this.onResourceFirstLoaded(map));
 
-        let image = new Image();
-        image.src = 'res/background.png';
-
-        //箭头函数，指向定义时的this
-        image.onload = () => {
-            this.ctx.drawImage(
-                image,
-                0,
-                0,
-                image.width,
-                image.height,
-                0,
-                0,
-                image.width,
-                image.height
-            );
-        }
-
-    }
+    }//constructor end
 
     //资源第一次加载
     onResourceFirstLoaded(map) {
-
+        //完成背景的初始化和渲染
+        let background = new BackGround(this.ctx ,map.get('background'));
+        background.draw();
     }
 }
