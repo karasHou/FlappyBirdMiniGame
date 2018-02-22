@@ -1,8 +1,11 @@
 //导演类，控制游戏的逻辑
+import {DataStore} from "./base/DataStore.js";
+
 export class Director {
     constructor() {
-        console.log('构造器初始化');
+        this.dataStore = DataStore.getInstance();
     }
+
     //基于ES6实现的单例模式
     static getInstance() {
         if(!Director.instance){
@@ -10,4 +13,10 @@ export class Director {
         }
         return Director.instance;
     }
+
+    run() {
+        const backgroundSprite = this.dataStore.get('background');
+        backgroundSprite.draw();
+    }
+
 }

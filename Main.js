@@ -2,11 +2,17 @@
 
 import {ResourceLoader} from "./js/base/ResourceLoader.js";
 import {BackGround} from "./js/runtime/BackGround.js";
+import {DataStore} from "./js/base/DataStore.js";
+import {Director} from "./js/Director.js";
 
 export class Main {
     constructor() {
         this.canvas = document.getElementById('game_canvas');
         this.ctx = this.canvas.getContext('2d');
+
+        // 初始化dataStore
+        this.dataStore = DataStore.getInstance();
+
         //简单工厂方法
         const loader = ResourceLoader.create();
         loader.onload(map => this.onResourceFirstLoaded(map));
@@ -15,8 +21,16 @@ export class Main {
 
     //资源第一次加载
     onResourceFirstLoaded(map) {
+        //长期保存
+        this.dataStore.ctx = this.ctx;
+        this.dataStore.res = map;
         //完成背景的初始化和渲染
-        let background = new BackGround(this.ctx ,map.get('background'));
-        background.draw();
+        this.init();
+    }
+
+    init() {
+        this.dataStore.put('background', BackGround);
+
+        Director.getInstance().run();
     }
 }
