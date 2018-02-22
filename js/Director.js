@@ -32,12 +32,36 @@ export class Director {
     }
 
     run() {
+        //绘制背景
         this.dataStore.get('background').draw();
-        this.dataStore.get('land').draw();
 
+        const pencils = this.dataStore.get('pencils');
+
+        //铅笔的右侧越过左侧的边界
+        if (pencils[0].x + pencils[0].width <= 0
+            && pencils.length === 4) {
+            //因为要显示两组铅笔，是四只
+
+            //销毁越界的两只铅笔
+            pencils.shift();
+            pencils.shift();
+        }
+
+
+        if (pencils[0].x <= (window.innerWidth - pencils[0].width) / 2
+            && pencils.length === 2) {
+            //创建新的一组铅笔
+            this.createPencil();
+        }
+
+        //这里要注意先绘制铅笔，再用land覆盖
         this.dataStore.get('pencils').forEach(function (value) {
             value.draw();
         });
+
+        //绘制陆地
+        this.dataStore.get('land').draw();
+
 
         //自适应浏览器的帧率,提高性能
         let timer = requestAnimationFrame(() => this.run());
