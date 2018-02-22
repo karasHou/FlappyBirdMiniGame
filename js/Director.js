@@ -6,7 +6,8 @@ import {DownPencil} from "./runtime/DownPencil.js";
 export class Director {
     constructor() {
         this.dataStore = DataStore.getInstance();
-        this.landSpeed = 2;
+        //控制速度为1.5px
+        this.landSpeed = 1.5;
     }
 
     //基于ES6实现的单例模式
@@ -31,12 +32,13 @@ export class Director {
         this.dataStore.get('pencils').push(new DownPencil(top));
     }
 
+    //开始绘制
     run() {
         //绘制背景
         this.dataStore.get('background').draw();
 
-        const pencils = this.dataStore.get('pencils');
 
+        const pencils = this.dataStore.get('pencils');
         //铅笔的右侧越过左侧的边界
         if (pencils[0].x + pencils[0].width <= 0
             && pencils.length === 4) {
@@ -46,13 +48,12 @@ export class Director {
             pencils.shift();
             pencils.shift();
         }
-
-
         if (pencils[0].x <= (window.innerWidth - pencils[0].width) / 2
             && pencils.length === 2) {
-            //创建新的一组铅笔
+            //当同一个屏幕只有一组铅笔，创建新的一组铅笔
             this.createPencil();
         }
+
 
         //这里要注意先绘制铅笔，再用land覆盖
         this.dataStore.get('pencils').forEach(function (value) {
