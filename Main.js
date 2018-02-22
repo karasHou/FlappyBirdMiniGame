@@ -14,6 +14,8 @@ export class Main {
         // 初始化dataStore
         this.dataStore = DataStore.getInstance();
 
+        this.director = Director.getInstance();
+
         //简单工厂方法
         const loader = ResourceLoader.create();
         loader.onload(map => this.onResourceFirstLoaded(map));
@@ -31,9 +33,12 @@ export class Main {
 
     init() {
         this.dataStore
+            .put('pencils',[])
             .put('background', BackGround)
             .put('land',Land);
 
-        Director.getInstance().run();
+        //创建铅笔要在游戏逻辑开始之前
+        this.director.createPencil();
+        this.director.run();
     }
 }
