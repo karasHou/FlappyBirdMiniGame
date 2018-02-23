@@ -32,6 +32,9 @@ export class Main {
     }
 
     init() {
+        //首先重置游戏没有结束
+        this.director.isGameOver = false;
+
         this.dataStore
             .put('pencils',[])
             .put('background', BackGround)
