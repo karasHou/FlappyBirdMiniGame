@@ -65,6 +65,8 @@ export class Director {
             //绘制陆地
             this.dataStore.get('land').draw();
 
+            this.dataStore.get('birds').draw();
+
 
             //自适应浏览器的帧率,提高性能
             let timer = requestAnimationFrame(() => this.run());
