@@ -42,8 +42,70 @@ export class Director {
         this.dataStore.get('birds').time = 0;
     }
 
+    //判断小鸟是否撞击铅笔
+    static isStrike(bird, pencil) {
+        let s = false;
+        //1. 小鸟碰到上面的铅笔（垂直）
+        //2. 小鸟碰到下面的铅笔（垂直）
+        //3. 小鸟碰到铅笔左侧
+        //4. 小鸟碰到铅笔右侧
+        if (bird.top > pencil.bottom ||
+            bird.bottom < pencil.top ||
+            bird.right < pencil.left ||
+            bird.left > pencil.right
+        ) {
+            s = true;
+        }
+        return !s;
+    }
+
+    //判断小鸟是否撞击地板
+    check() {
+        const birds = this.dataStore.get('birds');
+        const land = this.dataStore.get('land');
+
+        const pencils = this.dataStore.get('pencils');
+
+        //地板的撞击判断
+        if (birds.birdsY[0] + birds.birdsHeight[0] >= land.y) {
+            this.isGameOver = true;
+            return;
+        }
+
+        //创建小鸟的边框模型
+        const birdsBorder = {
+            top: birds.y[0],
+            bottom: birds.birdsY[0] + birds.birdsHeight[0],
+            left: birds.birdsX[0],
+            right: birds.birdsX[0] + birds.birdsWidth[0]
+        };
+
+        //铅笔模型的创建
+        const length = pencils.length;
+
+        for (let i = 0; i < length; i++) {
+            const pencil = pencils[i];
+            const pencilBorder = {
+                top: pencil.y,
+                bottom: pencil.y + pencil.height,
+                left: pencil.x,
+                right: pencil.x + pencil.width
+            };
+
+            if (Director.isStrike(birdsBorder, pencilBorder)) {
+                console.log('撞到水管啦');
+                this.isGameOver = true;
+                return;
+            }
+        }
+
+    }
+
     //开始绘制
     run() {
+        //绘制前先判断是否碰撞
+        this.check();
+
         //游戏未结束
         if (!this.isGameOver) {
             //绘制背景
@@ -88,6 +150,8 @@ export class Director {
             cancelAnimationFrame(this.dataStore.get('timer'));
             //将全部的精灵置空,提升性能
             this.dataStore.destroy();
+
+            console.log('游戏结束');
         }
     }
 }
