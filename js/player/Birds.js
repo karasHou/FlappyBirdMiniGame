@@ -56,7 +56,11 @@ export class Birds extends Sprite {
         const speed = .2;
 
         //重力加速度
-        const g = 0.98 / 2;
+        const g = 0.98 / 2.4;
+
+        //向上移动一丢丢的偏移量，再下落
+        const offsetUp = 30;
+
 
         this.count = this.count + speed;
         //0,1,2
@@ -68,7 +72,7 @@ export class Birds extends Sprite {
         this.index = Math.floor(this.count);
 
         //重力位移公式
-        const offsetY = (g * this.time * this.time) / 2;
+        const offsetY = (g * this.time * (this.time - offsetUp)) / 2;
 
         for (let i = 0; i <= 2; i++) {
             this.birdsY[i] = this.y[i] + offsetY;
