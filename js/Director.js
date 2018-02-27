@@ -32,10 +32,20 @@ export class Director {
         this.dataStore.get('pencils').push(new DownPencil(top));
     }
 
+    birdsEvent() {
+        //遍历三种状态的鸟，改变其Y坐标
+        for (let i = 0; i <= 2; i++) {
+            this.dataStore.get('birds').y[i] =
+                this.dataStore.get('birds').birdsY[i];
+        }
+        // 计时器时间置零,重新开始自由落体运动（先起跳一段弧形）
+        this.dataStore.get('birds').time = 0;
+    }
+
     //开始绘制
     run() {
         //游戏未结束
-        if(!this.isGameOver){
+        if (!this.isGameOver) {
             //绘制背景
             this.dataStore.get('background').draw();
 
@@ -73,7 +83,7 @@ export class Director {
             //将其存入dataStore中
             this.dataStore.put('timer', timer);
 
-        }else{
+        } else {
             //当游戏结束，停止动画
             cancelAnimationFrame(this.dataStore.get('timer'));
             //将全部的精灵置空,提升性能

@@ -57,8 +57,11 @@ export class Main {
             e.preventDefault();
             //如果游戏结束
             if (this.director.isGameOver) {
+                console.log('游戏开始');
                 //重新初始化
                 this.init();
+            } else {
+                this.director.birdsEvent();
             }
         });
     }
