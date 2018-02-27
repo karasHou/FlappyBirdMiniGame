@@ -37,13 +37,30 @@ export class Main {
         this.director.isGameOver = false;
 
         this.dataStore
-            .put('pencils',[])
+            .put('pencils', [])
             .put('background', BackGround)
-            .put('land',Land)
-            .put('birds',Birds);
+            .put('land', Land)
+            .put('birds', Birds);
+
+        //注册事件
+        this.registerEvent();
 
         //创建铅笔要在游戏逻辑开始之前
         this.director.createPencil();
         this.director.run();
     }
+
+    registerEvent() {
+        //使用=>使this指向Main类
+        this.canvas.addEventListener('touchstart', e => {
+            //屏蔽事件冒泡
+            e.preventDefault();
+            //如果游戏结束
+            if (this.director.isGameOver) {
+                //重新初始化
+                this.init();
+            }
+        });
+    }
+
 }
