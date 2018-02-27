@@ -5,6 +5,7 @@ import {DataStore} from "../base/DataStore.js";
 
 export class Birds extends Sprite {
     constructor() {
+        //获取鸟的图片
         const image = Sprite.getImage('birds');
         super(image, 0, 0, image.width, image.height,
             0, 0, image.width, image.height);
@@ -44,25 +45,43 @@ export class Birds extends Sprite {
         this.index = 0;
         this.count = 0;
         this.time = 0;
+
+
     }
 
     //绘制出鸟类
     draw() {
+
         //切换三只小鸟的速度
-        const speed = 1;
+        const speed = .2;
+
+        //重力加速度
+        const g = 0.98 / 2;
+
         this.count = this.count + speed;
         //0,1,2
         if (this.index >= 2) {
             this.count = 0;
         }
 
-        this.index = this.count;
-        super.draw(this.img,
-            this.clippingX[this.index],
-            this.clippingY[this.index],
+        //如果遇到小数就读取不到对应坐标的图片
+        this.index = Math.floor(this.count);
+
+        //重力位移公式
+        const offsetY = (g * this.time * this.time) / 2;
+
+        for (let i = 0; i <= 2; i++) {
+            this.birdsY[i] = this.y[i] + offsetY;
+        }
+        this.time++;
+
+        //绘制出小鸟
+        super.draw(
+            this.img,
+            this.clippingX[this.index], this.clippingY[this.index],
             this.clippingWidth[this.index], this.clippingHeight[this.index],
             this.birdsX[this.index], this.birdsY[this.index],
-            this.birdsWidth[this.index], this.birdsHeight[this.index]);
-
+            this.birdsWidth[this.index], this.birdsHeight[this.index]
+        );
     }
 }

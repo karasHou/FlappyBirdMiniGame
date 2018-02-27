@@ -2,7 +2,7 @@
 import {DataStore} from "./DataStore.js";
 
 export class Sprite {
-
+    //ES6默认值初始化
     constructor(img = null,
                 srcX = 0,
                 srcY = 0,
