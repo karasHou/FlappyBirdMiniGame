@@ -32,6 +32,7 @@ export class Director {
         this.dataStore.get('pencils').push(new DownPencil(top));
     }
 
+    //点击屏幕的处理
     birdsEvent() {
         //遍历三种状态的鸟，改变其Y坐标
         for (let i = 0; i <= 2; i++) {
@@ -63,7 +64,7 @@ export class Director {
     check() {
         const birds = this.dataStore.get('birds');
         const land = this.dataStore.get('land');
-
+        const score = this.dataStore.get('score');
         const pencils = this.dataStore.get('pencils');
 
         //地板的撞击判断
@@ -99,6 +100,14 @@ export class Director {
             }
         }
 
+        //加分逻辑
+        if (birds.birdsX[0] > pencils[0].x + pencils[0].width
+            && score.isScore) {
+            //越过铅笔
+            score.isScore = false;
+            score.scoreNumber++;
+        }
+
     }
 
     //开始绘制
@@ -121,6 +130,10 @@ export class Director {
                 //销毁越界的两只铅笔
                 pencils.shift();
                 pencils.shift();
+
+                //重置 可以加分
+                this.dataStore.get('score').isScore = true;
+
             }
             if (pencils[0].x <= (window.innerWidth - pencils[0].width) / 2
                 && pencils.length === 2) {
@@ -136,7 +149,7 @@ export class Director {
 
             //绘制陆地
             this.dataStore.get('land').draw();
-
+            this.dataStore.get('score').draw();
             this.dataStore.get('birds').draw();
 
 
@@ -146,12 +159,15 @@ export class Director {
             this.dataStore.put('timer', timer);
 
         } else {
+            console.log('游戏结束');
+
+            this.dataStore.get('startButton').draw();
+
             //当游戏结束，停止动画
             cancelAnimationFrame(this.dataStore.get('timer'));
             //将全部的精灵置空,提升性能
             this.dataStore.destroy();
 
-            console.log('游戏结束');
         }
     }
 }
